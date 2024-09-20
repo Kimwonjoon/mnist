@@ -7,6 +7,7 @@ from pytz import timezone
 import pymysql.cursors
 
 import uuid
+from mnist.db import get_conn, select, dml
 
 app = FastAPI()
 
@@ -32,12 +33,13 @@ async def create_upload_file(file: UploadFile): # async 비동기 ??? -> 이거 
     # 컬럼정보 : 파일이름, 파일경로, 요청시간(초기 insert), 요청 사용자(n??) # not null
     # 컬럼정보 : 예측모델, 예측결과, 요청시간, 예측시간(추후 업뎃) # null
     # DB insert
-    connection = pymysql.connect(host=os.getenv("DB_IP", "localhost"),
-                             user='mnist',
-                             password='1234',
-                             database='mnistdb',
-                             port=int(os.getenv("MY_PORT", 53306)),
-                             cursorclass=pymysql.cursors.DictCursor)
+#    connection = pymysql.connect(host=os.getenv("DB_IP", "localhost"),
+#                             user='mnist',
+#                             password='1234',
+#                             database='mnistdb',
+#                             port=int(os.getenv("MY_PORT", 53306)),
+#                             cursorclass=pymysql.cursors.DictCursor)
+    connection = get_conn()
     sql = "INSERT INTO `image_processing`(file_name, file_path, request_time, request_user) VALUES (%s, %s, %s, %s)"
     with connection:
         with connection.cursor() as cursor:
@@ -52,12 +54,7 @@ async def create_upload_file(file: UploadFile): # async 비동기 ??? -> 이거 
             }
 @app.post("/all/")
 def all():
-    connection = pymysql.connect(host=os.getenv("DB_IP", "localhost"),
-                         user='mnist',
-                         password='1234',
-                         database='mnistdb',
-                         port=int(os.getenv("MY_PORT", 53306)),
-                         cursorclass=pymysql.cursors.DictCursor)
+    connection = get_conn()
     with connection:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM image_processing"
@@ -67,12 +64,7 @@ def all():
     return result
 @app.post("/one/")
 def one():
-    connection = pymysql.connect(host=os.getenv("DB_IP", "localhost"),
-                         user='mnist',
-                         password='1234',
-                         database='mnistdb',
-                         port=int(os.getenv("MY_PORT", 53306)),
-                         cursorclass=pymysql.cursors.DictCursor)
+    connection = get_conn()
     with connection:
         with connection.cursor() as cursor:
             sql = "SELECT * FROM image_processing"
@@ -82,16 +74,6 @@ def one():
     return result
 @app.post("/many/{size}")
 def many(size: int):
-    connection = pymysql.connect(host=os.getenv("DB_IP", "localhost"),
-                         user='mnist',
-                         password='1234',
-                         database='mnistdb',
-                         port=int(os.getenv("MY_PORT", 53306)),
-                         cursorclass=pymysql.cursors.DictCursor)
-    with connection:
-        with connection.cursor() as cursor:
-            sql = f"SELECT * FROM image_processing WHERE prediction_time IS NULL ORDER BY num"
-            cursor.execute(sql)
-            result = cursor.fetchmany(size)
-            #print(result)
+    sql = f"SELECT * FROM image_processing WHERE prediction_time IS NULL ORDER BY num"
+    result = select(sql, size)
     return result
