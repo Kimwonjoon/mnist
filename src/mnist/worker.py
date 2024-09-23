@@ -53,4 +53,4 @@ def run():
         "train_data_nth":result['num'],
         "pred":pred
     }
-print(run())
+#print(run())
