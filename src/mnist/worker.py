@@ -13,7 +13,7 @@ def run():
     connection = get_conn()
     with connection:
         with connection.cursor() as cursor:
-            sql = "SELECT num FROM image_processing WHERE prediction_result IS NULL"
+            sql = "SELECT num FROM image_processing WHERE prediction_result IS NULL ORDER BY num"
             cursor.execute(sql)
             result = cursor.fetchone() # 형식 : {'num' : ?}
             #print(result)
