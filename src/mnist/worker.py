@@ -29,6 +29,7 @@ def run():
         with connection.cursor() as cursor:
             sql = f"UPDATE image_processing SET prediction_result={pred}, prediction_model='knn', prediction_time='{ts}' WHERE num={result['num']}"
             cursor.execute(sql)
+        connection.commit()
     # STEP 3
     # LINE 으로 처리 결과 전송
     headers = {
