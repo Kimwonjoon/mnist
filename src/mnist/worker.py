@@ -33,7 +33,7 @@ def run():
     # STEP 3
     # LINE 으로 처리 결과 전송
     headers = {
-        'Authorization': 'Bearer ' + os.getenv('LINE_NOTI_PATH', ''),
+        'Authorization': 'Bearer ' + os.getenv('LINE_NOTI_PATH', '0CexLLmrOvvWXwb21FLPvNXiwV3JKpqh7tcC9mjEmc2'),
     }
 
     files = {
