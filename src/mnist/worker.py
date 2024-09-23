@@ -4,6 +4,7 @@ from mnist.db import get_conn, select, dml
 
 import random
 import requests
+import os
 def run():
     """image_processing 테이블을 읽어서 가장 오래된 요청 하나씩을 처리"""
   
@@ -31,7 +32,7 @@ def run():
     # STEP 3
     # LINE 으로 처리 결과 전송
     headers = {
-        'Authorization': 'Bearer ' + '0CexLLmrOvvWXwb21FLPvNXiwV3JKpqh7tcC9mjEmc2',
+        'Authorization': 'Bearer ' + os.getenv('LINE_NOTI_PATH', ''),
     }
 
     files = {
