@@ -18,9 +18,6 @@ def run():
             #print(result)
     #return result
 
-    if result == None:
-        return None
-
     # STEP 2
     # RANDOM 으로 0 ~ 9 중 하나 값을 prediction_result 컬럼에 업데이트
     # 동시에 prediction_model, prediction_time 도 업데이트
@@ -39,6 +36,11 @@ def run():
 
     files = {
         'message': (None, f"{result['num']}번째 이미지의 예측결과는 {pred}입니다."),
+    }
+
+    if result == None:
+        files = {
+        'message': (None, f"업데이트 할 데이터가 없습니다."),
     }
 
     response = requests.post('https://notify-api.line.me/api/notify', headers=headers, files=files)
