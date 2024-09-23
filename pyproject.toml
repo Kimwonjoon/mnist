@@ -1,6 +1,6 @@
 [project]
 name = "mnist"
-version = "0.2.1"
+version = "0.2.2"
 description = "Default template for PDM package"
 authors = [
     {name = "Kimwonjoon", email = "kimpass189@gmail.com"},
@@ -26,3 +26,6 @@ distribution = true
 
 [project.scripts]
 ml-worker = 'mnist.worker:run'
+
+[tool.setuptools]
+package-dir = {"" = "src"}
