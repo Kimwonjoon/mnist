@@ -44,7 +44,7 @@ def run():
     if result == None:
         files = {
         'message': (None, f"업데이트 할 데이터가 없습니다."),
-    }
+        }
         response = requests.post('https://notify-api.line.me/api/notify', headers=headers, files=files)
 
         print(f"업데이트 할 데이터가 없습니다.")
@@ -67,4 +67,3 @@ def run():
         "train_data_nth":result['num'],
         "pred":pred
     }
-run()
