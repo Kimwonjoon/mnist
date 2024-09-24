@@ -1,6 +1,7 @@
 from datetime import datetime
 from pytz import timezone
 from mnist.db import get_conn, select, dml
+from mnist.model.cnn_model import predict_digit
 
 import random
 import requests
@@ -13,9 +14,9 @@ def run():
     connection = get_conn()
     with connection:
         with connection.cursor() as cursor:
-            sql = "SELECT num FROM image_processing WHERE prediction_result IS NULL ORDER BY num"
+            sql = "SELECT num, file_path FROM image_processing WHERE prediction_result IS NULL ORDER BY num"
             cursor.execute(sql)
-            result = cursor.fetchone() # 형식 : {'num' : ?}
+            result = cursor.fetchone() # 형식 : {'num' : ?, 'file_path' : ?}
             #print(result)
     #return result
 
@@ -27,11 +28,11 @@ def run():
         ind = None
     else:
         ind = result['num']
-        pred = random.randint(0,9)
+        pred = predict_digit(result['file_path']) # 예측 숫자가 나오겠죠
         connection = get_conn()
         with connection:
             with connection.cursor() as cursor:
-                sql = f"UPDATE image_processing SET prediction_result={pred}, prediction_model='randint', prediction_time='{ts}' WHERE num={ind}"
+                sql = f"UPDATE image_processing SET prediction_result={pred}, prediction_model='CNN', prediction_time='{ts}' WHERE num={ind}"
                 cursor.execute(sql)
             connection.commit()
     # STEP 3
@@ -66,4 +67,4 @@ def run():
         "train_data_nth":result['num'],
         "pred":pred
     }
-#print(run())
+run()
