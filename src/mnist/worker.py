@@ -14,7 +14,7 @@ def run():
     connection = get_conn()
     with connection:
         with connection.cursor() as cursor:
-            sql = "SELECT num, file_path FROM image_processing WHERE prediction_result IS NULL ORDER BY num"
+            sql = "SELECT num, file_path FROM image_processing WHERE prediction_result IS NULL ORDER BY num LIMIT 1"
             cursor.execute(sql)
             result = cursor.fetchone() # 형식 : {'num' : ?, 'file_path' : ?}
             #print(result)
