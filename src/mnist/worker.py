@@ -14,7 +14,7 @@ def run():
     connection = get_conn()
     with connection:
         with connection.cursor() as cursor:
-            sql = "SELECT num, file_path FROM image_processing WHERE prediction_result IS NULL ORDER BY num LIMIT 1"
+            sql = "SELECT num, file_path, label FROM image_processing WHERE prediction_result IS NULL ORDER BY num LIMIT 1"
             cursor.execute(sql)
             result = cursor.fetchone() # 형식 : {'num' : ?, 'file_path' : ?}
             #print(result)
@@ -55,15 +55,16 @@ def run():
         }
 
     files = {
-        'message': (None, f"{ind}번째 이미지의 예측결과는 {pred}입니다."),
+        'message': (None, f"{ind}번째 이미지의 예측결과는 {pred}입니다. 정답은 {result['label']}입니다."),
     }
 
     response = requests.post('https://notify-api.line.me/api/notify', headers=headers, files=files)
 
-    print(f"[{ts}] {result['num']}번째 이미지의 예측결과는 {pred}입니다.")
+    print(f"[{ts}] {result['num']}번째 이미지의 예측결과는 {pred}입니다. 정답은 {result['label']}입니다.")
 
     return {
         "prediction_time":ts,
         "train_data_nth":result['num'],
+        "label":result['label']
         "pred":pred
     }

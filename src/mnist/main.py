@@ -21,6 +21,7 @@ async def create_upload_file(file: UploadFile): # async 비동기 ??? -> 이거 
     # 이미지 파일 서버에 저장
     img = await file.read()
     file_name = file.filename
+    file_label = int(file_name.split('.')[0].split('_')[-1])
     file_ext = file.content_type.split('/')[-1] # content_type = image/png 형식으로 출력됨
 
     upload_dir = os.getenv('UPLOAD_DIR', "/home/kimpass189/code/mnist/photo")
@@ -40,14 +41,15 @@ async def create_upload_file(file: UploadFile): # async 비동기 ??? -> 이거 
 #                             port=int(os.getenv("MY_PORT", 53306)),
 #                             cursorclass=pymysql.cursors.DictCursor)
     connection = get_conn()
-    sql = "INSERT INTO `image_processing`(file_name, file_path, request_time, request_user) VALUES (%s, %s, %s, %s)"
+    sql = "INSERT INTO `image_processing`(file_name, label, file_path, request_time, request_user) VALUES (%s, %s, %s, %s, %s)"
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(sql,(file_name, file_full_path, ts, "n18"))
+            cursor.execute(sql,(file_name, file_label, file_full_path, ts, "n18"))
         connection.commit()
 
     return {
             "filename": file_name,
+            "filelabel" : file_label,
             "content_type" : file.content_type,
             "file_full_path" : file_full_path,
             "request_time" : ts 
