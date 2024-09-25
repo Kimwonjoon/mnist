@@ -21,7 +21,7 @@ async def create_upload_file(file: UploadFile): # async 비동기 ??? -> 이거 
     # 이미지 파일 서버에 저장
     img = await file.read()
     file_name = file.filename
-    file_label = int(file_name.split('.')[0].split('_')[-1])
+    file_label = file_name.split('.')[0].split('_')[0]
     file_ext = file.content_type.split('/')[-1] # content_type = image/png 형식으로 출력됨
 
     upload_dir = os.getenv('UPLOAD_DIR', "/home/kimpass189/code/mnist/photo")
