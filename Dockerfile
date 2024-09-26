@@ -12,6 +12,6 @@ COPY ml-work-cronjob /etc/cron.d/ml-work-cronjob
 RUN crontab /etc/cron.d/ml-work-cronjob
 
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir --upgrade git+https://github.com/Kimwonjoon/mnist.git@0.3/mnist
+RUN pip install --no-cache-dir --upgrade git+https://github.com/Kimwonjoon/mnist.git@0.4/code
 
 CMD ["sh", "run.sh"]
