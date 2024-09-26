@@ -6,7 +6,8 @@ import os
 # 모델 로드
 def get_model_path():
     path = os.path.dirname(__file__)
-    model_path = path + "/" + "mnist240924.keras"
+    #model_path = path + "/" + "mnist240924.keras"
+    model_path = path + "/" + "mnist925.keras"
     return model_path
 
 model = load_model(get_model_path())  # 학습된 모델 파일 경로
