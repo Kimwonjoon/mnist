@@ -33,7 +33,7 @@ def run():
         connection = get_conn()
         with connection:
             with connection.cursor() as cursor:
-                sql = f"UPDATE image_processing SET prediction_result={pred}, prediction_model='CNN', prediction_time='{ts}' WHERE num={ind}"
+                sql = f"UPDATE image_processing SET prediction_result={pred}, prediction_model='n18', prediction_time='{ts}' WHERE num={ind}"
                 cursor.execute(sql)
             connection.commit()
     # STEP 3
